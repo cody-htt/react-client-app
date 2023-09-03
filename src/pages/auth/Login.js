@@ -28,12 +28,10 @@ const Login = ({ history }) => {
 		let intendedPage = history.location.state;
 		if (intendedPage) {
 			history.push(intendedPage.from);
+		} else if (res.data.role === 'admin') {
+			history.push('/admin/dashboard');
 		} else {
-			if (res.data.role === 'admin') {
-				history.push('/admin/dashboard');
-			} else {
-				history.push('/user/history');
-			}
+			history.push('/user/history');
 		}
 	};
 
@@ -87,7 +85,7 @@ const Login = ({ history }) => {
 
 	const googleLogin = async () => {
 		auth
-			.signInWithRedirect(googleAuthProvider)
+			.signInWithPopup(googleAuthProvider)
 			.then(async (result) => {
 				const { user } = result;
 				const idTokenResult = await user.getIdTokenResult();
